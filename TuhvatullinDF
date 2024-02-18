@@ -4,7 +4,6 @@ from transaction
 where standard_cost > 1500
 
 
-
 2 Вывести все подтвержденные транзакции за период '2017-04-01' по '2017-04-09' включительно
 select transaction_id, transaction_date
 from transaction
@@ -13,7 +12,6 @@ where transaction_date::date between '2017-04-01' and '2017-04-09'
 
 
 3 Вывести все профессии у клиентов из сферы IT или Financial Services, которые начинаются с фразы 'Senior'.
-
 select distinct job_title
 from "Customers"
 where 	(job_industry_category = 'IT'
@@ -41,6 +39,7 @@ where customer_id in (
 		limit 10
 		)
 
+
 6 Вывести всех клиентов, у которых нет транзакций.
 select "Customers"."customer_id", first_name, last_name
 from "Customers"
@@ -48,10 +47,8 @@ left join "transaction"
 on "Customers"."customer_id" = "transaction"."customer_id"
 where "transaction"."customer_id" is null
 
-7 Вывести всех клиентов из IT, у которых транзакции с максимальной стандартной стоимостью.
-select max(standard_cost)
-from "transaction"
 
+7 Вывести всех клиентов из IT, у которых транзакции с максимальной стандартной стоимостью.
 select distinct "Customers"."customer_id", first_name, last_name, standard_cost
 from "Customers"
 inner join "transaction"
@@ -71,4 +68,3 @@ on "Customers"."customer_id" = "transaction"."customer_id"
 where job_industry_category in ('IT', 'Health')	
 		and transaction_date::date between '2017-07-07' and '2017-07-17'
 		and order_status = 'Approved'
-
