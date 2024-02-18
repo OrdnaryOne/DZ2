@@ -1,0 +1,72 @@
+1 Вывести все уникальные бренды, у которых стандартная стоимость выше 1500 долларов.
+select distinct brand
+from transaction
+where standard_cost > 1500
+
+
+2 Вывести все подтвержденные транзакции за период '2017-04-01' по '2017-04-09' включительно
+select transaction_id, transaction_date
+from transaction
+where transaction_date::date between '2017-04-01' and '2017-04-09'
+		and order_status = 'Approved'
+
+
+3 Вывести все профессии у клиентов из сферы IT или Financial Services, которые начинаются с фразы 'Senior'.
+
+select distinct job_title
+from "Customers"
+where 	(job_industry_category = 'IT'
+		or job_industry_category = 'Financial Services')
+		and  job_title like 'Senior%'
+
+
+4 Вывести все бренды, которые закупают клиенты, работающие в сфере Financial Services
+select distinct brand
+from transaction
+where customer_id in (
+		select customer_id
+		from "Customers" c 
+		where job_industry_category = 'Financial Services'
+		)
+
+
+5 Вывести 10 клиентов, которые оформили онлайн-заказ продукции из брендов 'Giant Bicycles', 'Norco Bicycles', 'Trek Bicycles'.
+select customer_id, first_name, last_name
+from "Customers"
+where customer_id in (
+		select distinct customer_id
+		from "transaction"
+		where brand in ('Giant Bicycles', 'Norco Bicycles', 'Trek Bicycles')
+		limit 10
+		)
+
+6 Вывести всех клиентов, у которых нет транзакций.
+select "Customers"."customer_id", first_name, last_name
+from "Customers"
+left join "transaction"
+on "Customers"."customer_id" = "transaction"."customer_id"
+where "transaction"."customer_id" is null
+
+7 Вывести всех клиентов из IT, у которых транзакции с максимальной стандартной стоимостью.
+select max(standard_cost)
+from "transaction"
+
+select distinct "Customers"."customer_id", first_name, last_name, standard_cost
+from "Customers"
+inner join "transaction"
+on "Customers"."customer_id" = "transaction"."customer_id"
+where "transaction"."standard_cost" = (
+		select max(standard_cost)
+		from "transaction"
+		)
+and job_industry_category = 'IT'		
+
+
+8 Вывести всех клиентов из сферы IT и Health, у которых есть подтвержденные транзакции за период '2017-07-07' по '2017-07-17'.
+select distinct "Customers"."customer_id", first_name, last_name
+from "Customers"
+inner join "transaction"
+on "Customers"."customer_id" = "transaction"."customer_id"
+where job_industry_category in ('IT', 'Health')	
+		and transaction_date::date between '2017-07-07' and '2017-07-17'
+		and order_status = 'Approved'
