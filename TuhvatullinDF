@@ -4,6 +4,7 @@ from transaction
 where standard_cost > 1500
 
 
+
 2 Вывести все подтвержденные транзакции за период '2017-04-01' по '2017-04-09' включительно
 select transaction_id, transaction_date
 from transaction
@@ -70,3 +71,4 @@ on "Customers"."customer_id" = "transaction"."customer_id"
 where job_industry_category in ('IT', 'Health')	
 		and transaction_date::date between '2017-07-07' and '2017-07-17'
 		and order_status = 'Approved'
+
